@@ -16,3 +16,14 @@ apis:
     type: Documentation
   description: >-
     Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
+common:
+- url: https://www.medidata.com/
+  type: Portal
+- url: https://www.medidata.com/
+  type: Website
+- url: https://www.medidata.com/en/life-science-resources/medidata-blog/
+  type: Blog
+maintainer:
+  name: Kin Lane
+  email: kin@apievangelist.com
+modified: '2026-03-18'

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-schema/medidata-subject-schema.json",
+  "title": "Medidata Rave Clinical Trial Subject",
+  "description": "A trial subject enrolled in a Medidata Rave clinical study",
+  "type": "object",
+  "required": ["subjectKey", "siteID", "status"],
+  "properties": {
+    "subjectKey": {
+      "type": "string",
+      "description": "Unique subject identifier within the study (may be auto-generated)"
+    },
+    "siteID": {
+      "type": "string",
+      "description": "ID of the investigator site where the subject is enrolled"
+    },
+    "siteName": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Active", "Inactive", "Screened", "Failed", "Randomized", "Completed", "Withdrawn"],
+      "description": "Current enrollment status of the subject"
+    },
+    "enrollmentDate": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "screeningDate": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "initials": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Subject initials (used in place of PII)"
+    },
+    "studyOID": {
+      "type": "string",
+      "description": "Parent study Object Identifier"
+    },
+    "events": {
+      "type": "array",
+      "description": "Clinical events (visits) for this subject",
+      "items": {
+        "$ref": "#/$defs/ClinicalEvent"
+      }
+    }
+  },
+  "$defs": {
+    "ClinicalEvent": {
+      "type": "object",
+      "required": ["eventOID"],
+      "properties": {
+        "eventOID": {
+          "type": "string",
+          "description": "Event Object Identifier (visit definition OID)"
+        },
+        "eventName": {
+          "type": "string"
+        },
+        "eventDate": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "repeatKey": {
+          "type": ["string", "null"],
+          "description": "Repeat key for recurring events"
+        },
+        "forms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CRFForm"
+          }
+        }
+      }
+    },
+    "CRFForm": {
+      "type": "object",
+      "required": ["formOID"],
+      "properties": {
+        "formOID": {
+          "type": "string"
+        },
+        "formName": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CRFField"
+          }
+        }
+      }
+    },
+    "CRFField": {
+      "type": "object",
+      "required": ["fieldOID"],
+      "properties": {
+        "fieldOID": {
+          "type": "string"
+        },
+        "value": {
+          "type": ["string", "null"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["NotStarted", "Saved", "Incomplete", "Complete", "Verified", "Signed", "Frozen", "Locked"]
+        },
+        "dataEntryDateTime": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "enteredBy": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

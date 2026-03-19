@@ -1,0 +1,69 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "medidata": "https://www.medidata.com/ontology/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Study": "schema:ResearchProject",
+    "studyOID": "schema:identifier",
+    "studyName": "schema:name",
+    "protocolName": {
+      "@id": "medidata:protocolName",
+      "@type": "xsd:string"
+    },
+    "environment": {
+      "@id": "medidata:environment",
+      "@type": "xsd:string"
+    },
+    "status": "schema:status",
+    "createdDate": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "modifiedDate": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "Subject": "schema:Patient",
+    "subjectKey": "schema:identifier",
+    "siteID": {
+      "@id": "schema:memberOf",
+      "@type": "xsd:string"
+    },
+    "enrollmentDate": {
+      "@id": "schema:startDate",
+      "@type": "xsd:date"
+    },
+    "screeningDate": {
+      "@id": "medidata:screeningDate",
+      "@type": "xsd:date"
+    },
+    "initials": {
+      "@id": "schema:additionalName",
+      "@type": "xsd:string"
+    },
+    "ClinicalEvent": "schema:MedicalStudy",
+    "eventOID": "schema:identifier",
+    "eventName": "schema:name",
+    "eventDate": {
+      "@id": "schema:eventDate",
+      "@type": "xsd:date"
+    },
+    "CRFForm": "schema:Observation",
+    "formOID": "schema:identifier",
+    "formName": "schema:name",
+    "CRFField": "schema:PropertyValue",
+    "fieldOID": "schema:identifier",
+    "value": "schema:value",
+    "dataEntryDateTime": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "Site": "schema:Hospital",
+    "siteName": "schema:name",
+    "investigator": "schema:employee",
+    "city": "schema:addressLocality",
+    "country": "schema:addressCountry"
+  }
+}

@@ -14,6 +14,12 @@ apis:
   properties:
   - url: https://www.medidata.com/
     type: Documentation
+  - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/openapi/medidata-rave-openapi.yml
+    type: OpenAPI
+  - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-schema/medidata-subject-schema.json
+    type: JSONSchema
+  - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-ld/medidata-context.jsonld
+    type: JSONLDContext
   description: >-
     Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
 common:
@@ -23,6 +29,12 @@ common:
   type: Website
 - url: https://www.medidata.com/en/life-science-resources/medidata-blog/
   type: Blog
+- url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/openapi/medidata-rave-openapi.yml
+  type: OpenAPI
+- url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-schema/medidata-subject-schema.json
+  type: JSONSchema
+- url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-ld/medidata-context.jsonld
+  type: JSONLDContext
 maintainer:
   name: Kin Lane
   email: kin@apievangelist.com

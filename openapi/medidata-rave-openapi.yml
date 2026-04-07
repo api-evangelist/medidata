@@ -494,9 +494,9 @@ components:
               - eventOID
               - forms
             properties:
-              eventOID: { type: string }
-              eventDate: { type: string, format: date }
-              repeatKey: { type: string }
+              eventOID: {type: string}
+              eventDate: {type: string, format: date}
+              repeatKey: {type: string}
               forms:
                 type: array
                 items:
@@ -505,7 +505,7 @@ components:
                     - formOID
                     - fields
                   properties:
-                    formOID: { type: string }
+                    formOID: {type: string}
                     fields:
                       type: array
                       items:
@@ -514,8 +514,8 @@ components:
                           - fieldOID
                           - value
                         properties:
-                          fieldOID: { type: string }
-                          value: { type: string }
+                          fieldOID: {type: string}
+                          value: {type: string}
     SubmissionResponse:
       type: object
       properties:
@@ -633,15 +633,15 @@ components:
         ErrorDescription:
           type: string
 tags:
-  - name: Studies
-    description: Clinical study management
-  - name: Subjects
-    description: Trial subject enrollment and management
+  - name: Audit
+    description: Audit trail access for 21 CFR Part 11 compliance
   - name: Clinical Data
     description: CRF data entry and retrieval
   - name: Queries
     description: Data query management
-  - name: Audit
-    description: Audit trail access for 21 CFR Part 11 compliance
   - name: Sites
     description: Investigator site management
+  - name: Studies
+    description: Clinical study management
+  - name: Subjects
+    description: Trial subject enrollment and management

@@ -1,0 +1,13 @@
+{
+  "repo": "medidata",
+  "feeds": [
+    {
+      "source": "https://www.medidata.com/en/life-science-resources/medidata-blog/",
+      "feed_url": "https://www.medidata.com/feed/",
+      "saved": 10,
+      "title": "Medidata Solutions"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-05-03T23:32:34Z"
+}

@@ -1,0 +1,551 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Medidata Rave EDC REST API
+  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management.
+    APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research
+    organizations and pharmaceutical companies.
+  tags:
+  - Medidata
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: medidata
+    baseUri: https://medidatatrials.medidata.com/RaveWebServices/studies
+    description: Medidata Rave EDC REST API HTTP API.
+    authentication:
+      type: basic
+      username: '{{MEDIDATA_USERNAME}}'
+      password: '{{MEDIDATA_PASSWORD}}'
+    resources:
+    - name: resource
+      path: /
+      operations:
+      - name: liststudies
+        method: GET
+        description: List studies
+        inputParameters:
+        - name: include
+          in: query
+          type: string
+          description: Include additional metadata (e.g., include=subjectCount)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: studyoid-subjects
+      path: /{studyOID}/Subjects
+      operations:
+      - name: listsubjects
+        method: GET
+        description: List subjects in a study
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+          description: Study OID (e.g., Mediflex(Dev))
+        - name: Status
+          in: query
+          type: string
+        - name: SiteID
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createsubject
+        method: POST
+        description: Create or update a subject
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: studyoid-subjects-subjectkey
+      path: /{studyOID}/Subjects/{subjectKey}
+      operations:
+      - name: getsubject
+        method: GET
+        description: Get subject details
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        - name: subjectKey
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: studyoid-subjects-subjectkey-clinicaldata
+      path: /{studyOID}/Subjects/{subjectKey}/ClinicalData
+      operations:
+      - name: getsubjectclinicaldata
+        method: GET
+        description: Get clinical data (CRF data) for a subject
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        - name: subjectKey
+          in: path
+          type: string
+          required: true
+        - name: formOID
+          in: query
+          type: string
+          description: Filter to a specific form OID
+        - name: EventRepeatKey
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: submitclinicaldata
+        method: POST
+        description: Submit clinical data for a subject
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        - name: subjectKey
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: studyoid-queries
+      path: /{studyOID}/Queries
+      operations:
+      - name: listqueries
+        method: GET
+        description: List data queries
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        - name: Status
+          in: query
+          type: string
+        - name: SiteID
+          in: query
+          type: string
+        - name: SubjectKey
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: studyoid-auditrecords
+      path: /{studyOID}/AuditRecords
+      operations:
+      - name: getauditrecords
+        method: GET
+        description: Get audit trail records
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        - name: SubjectKey
+          in: query
+          type: string
+        - name: SiteID
+          in: query
+          type: string
+        - name: StartDate
+          in: query
+          type: string
+        - name: EndDate
+          in: query
+          type: string
+        - name: PageSize
+          in: query
+          type: integer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: studyoid-sites
+      path: /{studyOID}/Sites
+      operations:
+      - name: listsites
+        method: GET
+        description: List study sites
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: medidata-rest
+    description: REST adapter for Medidata Rave EDC REST API.
+    resources:
+    - path: /
+      name: liststudies
+      operations:
+      - method: GET
+        name: liststudies
+        description: List studies
+        call: medidata.liststudies
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/Subjects
+      name: listsubjects
+      operations:
+      - method: GET
+        name: listsubjects
+        description: List subjects in a study
+        call: medidata.listsubjects
+        with:
+          studyOID: rest.studyOID
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/Subjects
+      name: createsubject
+      operations:
+      - method: POST
+        name: createsubject
+        description: Create or update a subject
+        call: medidata.createsubject
+        with:
+          studyOID: rest.studyOID
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/Subjects/{subjectKey}
+      name: getsubject
+      operations:
+      - method: GET
+        name: getsubject
+        description: Get subject details
+        call: medidata.getsubject
+        with:
+          studyOID: rest.studyOID
+          subjectKey: rest.subjectKey
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/Subjects/{subjectKey}/ClinicalData
+      name: getsubjectclinicaldata
+      operations:
+      - method: GET
+        name: getsubjectclinicaldata
+        description: Get clinical data (CRF data) for a subject
+        call: medidata.getsubjectclinicaldata
+        with:
+          studyOID: rest.studyOID
+          subjectKey: rest.subjectKey
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/Subjects/{subjectKey}/ClinicalData
+      name: submitclinicaldata
+      operations:
+      - method: POST
+        name: submitclinicaldata
+        description: Submit clinical data for a subject
+        call: medidata.submitclinicaldata
+        with:
+          studyOID: rest.studyOID
+          subjectKey: rest.subjectKey
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/Queries
+      name: listqueries
+      operations:
+      - method: GET
+        name: listqueries
+        description: List data queries
+        call: medidata.listqueries
+        with:
+          studyOID: rest.studyOID
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/AuditRecords
+      name: getauditrecords
+      operations:
+      - method: GET
+        name: getauditrecords
+        description: Get audit trail records
+        call: medidata.getauditrecords
+        with:
+          studyOID: rest.studyOID
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /{studyOID}/Sites
+      name: listsites
+      operations:
+      - method: GET
+        name: listsites
+        description: List study sites
+        call: medidata.listsites
+        with:
+          studyOID: rest.studyOID
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: medidata-mcp
+    transport: http
+    description: MCP adapter for Medidata Rave EDC REST API for AI agent use.
+    tools:
+    - name: liststudies
+      description: List studies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: medidata.liststudies
+      with:
+        include: tools.include
+      inputParameters:
+      - name: include
+        type: string
+        description: Include additional metadata (e.g., include=subjectCount)
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: listsubjects
+      description: List subjects in a study
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: medidata.listsubjects
+      with:
+        studyOID: tools.studyOID
+        Status: tools.Status
+        SiteID: tools.SiteID
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: Study OID (e.g., Mediflex(Dev))
+        required: true
+      - name: Status
+        type: string
+        description: Status
+      - name: SiteID
+        type: string
+        description: SiteID
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: createsubject
+      description: Create or update a subject
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: medidata.createsubject
+      with:
+        studyOID: tools.studyOID
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: studyOID
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getsubject
+      description: Get subject details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: medidata.getsubject
+      with:
+        studyOID: tools.studyOID
+        subjectKey: tools.subjectKey
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: studyOID
+        required: true
+      - name: subjectKey
+        type: string
+        description: subjectKey
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getsubjectclinicaldata
+      description: Get clinical data (CRF data) for a subject
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: medidata.getsubjectclinicaldata
+      with:
+        studyOID: tools.studyOID
+        subjectKey: tools.subjectKey
+        formOID: tools.formOID
+        EventRepeatKey: tools.EventRepeatKey
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: studyOID
+        required: true
+      - name: subjectKey
+        type: string
+        description: subjectKey
+        required: true
+      - name: formOID
+        type: string
+        description: Filter to a specific form OID
+      - name: EventRepeatKey
+        type: string
+        description: EventRepeatKey
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: submitclinicaldata
+      description: Submit clinical data for a subject
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: medidata.submitclinicaldata
+      with:
+        studyOID: tools.studyOID
+        subjectKey: tools.subjectKey
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: studyOID
+        required: true
+      - name: subjectKey
+        type: string
+        description: subjectKey
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: listqueries
+      description: List data queries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: medidata.listqueries
+      with:
+        studyOID: tools.studyOID
+        Status: tools.Status
+        SiteID: tools.SiteID
+        SubjectKey: tools.SubjectKey
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: studyOID
+        required: true
+      - name: Status
+        type: string
+        description: Status
+      - name: SiteID
+        type: string
+        description: SiteID
+      - name: SubjectKey
+        type: string
+        description: SubjectKey
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getauditrecords
+      description: Get audit trail records
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: medidata.getauditrecords
+      with:
+        studyOID: tools.studyOID
+        SubjectKey: tools.SubjectKey
+        SiteID: tools.SiteID
+        StartDate: tools.StartDate
+        EndDate: tools.EndDate
+        PageSize: tools.PageSize
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: studyOID
+        required: true
+      - name: SubjectKey
+        type: string
+        description: SubjectKey
+      - name: SiteID
+        type: string
+        description: SiteID
+      - name: StartDate
+        type: string
+        description: StartDate
+      - name: EndDate
+        type: string
+        description: EndDate
+      - name: PageSize
+        type: integer
+        description: PageSize
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: listsites
+      description: List study sites
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: medidata.listsites
+      with:
+        studyOID: tools.studyOID
+      inputParameters:
+      - name: studyOID
+        type: string
+        description: studyOID
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+binds:
+- namespace: env
+  keys:
+    MEDIDATA_USERNAME: MEDIDATA_USERNAME
+    MEDIDATA_PASSWORD: MEDIDATA_PASSWORD

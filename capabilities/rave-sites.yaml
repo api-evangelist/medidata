@@ -1,0 +1,79 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Medidata Rave EDC REST API — Sites
+  description: 'Medidata Rave EDC REST API — Sites. 1 operations. Lead operation: List study sites. Self-contained Naftiko
+    capability covering one Medidata business surface.'
+  tags:
+  - Medidata
+  - Sites
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MEDIDATA_API_KEY: MEDIDATA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rave-sites
+    baseUri: https://{tenant}.medidata.com/RaveWebServices/studies
+    description: Medidata Rave EDC REST API — Sites business capability. Self-contained, no shared references.
+    resources:
+    - name: studyOID-Sites
+      path: /{studyOID}/Sites
+      operations:
+      - name: listsites
+        method: GET
+        description: List study sites
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.MEDIDATA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: rave-sites-rest
+    port: 8080
+    description: REST adapter for Medidata Rave EDC REST API — Sites. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/{studyoid}/sites
+      name: studyoid-sites
+      description: REST surface for studyOID-Sites.
+      operations:
+      - method: GET
+        name: listsites
+        description: List study sites
+        call: rave-sites.listsites
+        with:
+          studyOID: rest.studyOID
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rave-sites-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Medidata Rave EDC REST API — Sites. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-study-sites
+      description: List study sites
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rave-sites.listsites
+      with:
+        studyOID: tools.studyOID
+      outputParameters:
+      - type: object
+        mapping: $.

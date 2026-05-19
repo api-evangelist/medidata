@@ -1,0 +1,94 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Medidata Rave EDC REST API — Queries
+  description: 'Medidata Rave EDC REST API — Queries. 1 operations. Lead operation: List data queries. Self-contained Naftiko
+    capability covering one Medidata business surface.'
+  tags:
+  - Medidata
+  - Queries
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MEDIDATA_API_KEY: MEDIDATA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rave-queries
+    baseUri: https://{tenant}.medidata.com/RaveWebServices/studies
+    description: Medidata Rave EDC REST API — Queries business capability. Self-contained, no shared references.
+    resources:
+    - name: studyOID-Queries
+      path: /{studyOID}/Queries
+      operations:
+      - name: listqueries
+        method: GET
+        description: List data queries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: studyOID
+          in: path
+          type: string
+          required: true
+        - name: Status
+          in: query
+          type: string
+        - name: SiteID
+          in: query
+          type: string
+        - name: SubjectKey
+          in: query
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.MEDIDATA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: rave-queries-rest
+    port: 8080
+    description: REST adapter for Medidata Rave EDC REST API — Queries. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/{studyoid}/queries
+      name: studyoid-queries
+      description: REST surface for studyOID-Queries.
+      operations:
+      - method: GET
+        name: listqueries
+        description: List data queries
+        call: rave-queries.listqueries
+        with:
+          studyOID: rest.studyOID
+          Status: rest.Status
+          SiteID: rest.SiteID
+          SubjectKey: rest.SubjectKey
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rave-queries-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Medidata Rave EDC REST API — Queries. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-data-queries
+      description: List data queries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rave-queries.listqueries
+      with:
+        studyOID: tools.studyOID
+        Status: tools.Status
+        SiteID: tools.SiteID
+        SubjectKey: tools.SubjectKey
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,79 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Medidata Rave EDC REST API — Studies
+  description: 'Medidata Rave EDC REST API — Studies. 1 operations. Lead operation: List studies. Self-contained Naftiko capability
+    covering one Medidata business surface.'
+  tags:
+  - Medidata
+  - Studies
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    MEDIDATA_API_KEY: MEDIDATA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rave-studies
+    baseUri: https://{tenant}.medidata.com/RaveWebServices/studies
+    description: Medidata Rave EDC REST API — Studies business capability. Self-contained, no shared references.
+    resources:
+    - name: root
+      path: /
+      operations:
+      - name: liststudies
+        method: GET
+        description: List studies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: include
+          in: query
+          type: string
+          description: Include additional metadata (e.g., include=subjectCount)
+    authentication:
+      type: bearer
+      token: '{{env.MEDIDATA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: rave-studies-rest
+    port: 8080
+    description: REST adapter for Medidata Rave EDC REST API — Studies. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1
+      name: root
+      description: REST surface for root.
+      operations:
+      - method: GET
+        name: liststudies
+        description: List studies
+        call: rave-studies.liststudies
+        with:
+          include: rest.include
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rave-studies-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Medidata Rave EDC REST API — Studies. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-studies
+      description: List studies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: rave-studies.liststudies
+      with:
+        include: tools.include
+      outputParameters:
+      - type: object
+        mapping: $.

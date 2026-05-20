@@ -1,55 +1,57 @@
 aid: medidata
 url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/apis.yml
 apis:
-- aid: medidata:medidata-api
-  name: Medidata Rave EDC API
-  tags:
-  - Clinical Trials
-  - Data Capture
-  - EDC
-  - Pharma
-  image: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/image.png
-  humanURL: https://www.medidata.com/
-  baseURL: https://api.medidata.example.com
-  properties:
+  - aid: medidata:medidata-api
+    name: Medidata Rave EDC API
+    tags:
+    - Clinical Trials
+    - Data Capture
+    - EDC
+    - Pharma
+    image: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/image.png
+    humanURL: https://www.medidata.com/
+    baseURL: https://api.medidata.example.com
+    properties:
+    - url: https://www.medidata.com/
+      type: Documentation
+    - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/openapi/medidata-rave-openapi.yml
+      type: OpenAPI
+    - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-schema/medidata-subject-schema.json
+      type: JSONSchema
+    - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-ld/medidata-context.jsonld
+      type: JSONLDContext
+    - type: NaftikoCapability
+      url: capabilities/rave-audit.yaml
+    - type: NaftikoCapability
+      url: capabilities/rave-clinical-data.yaml
+    - type: NaftikoCapability
+      url: capabilities/rave-queries.yaml
+    - type: NaftikoCapability
+      url: capabilities/rave-sites.yaml
+    - type: NaftikoCapability
+      url: capabilities/rave-studies.yaml
+    - type: NaftikoCapability
+      url: capabilities/rave-subjects.yaml
+    description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management.
+      APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research
+      organizations and pharmaceutical companies.
+common:
+  - type: GitHubOrganization
+    url: https://github.com/mdsol
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/medidata-solutions
   - url: https://www.medidata.com/
-    type: Documentation
+    type: Portal
+  - url: https://www.medidata.com/
+    type: Website
+  - url: https://www.medidata.com/en/life-science-resources/medidata-blog/
+    type: Blog
   - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/openapi/medidata-rave-openapi.yml
     type: OpenAPI
   - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-schema/medidata-subject-schema.json
     type: JSONSchema
   - url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-ld/medidata-context.jsonld
     type: JSONLDContext
-  - type: NaftikoCapability
-    url: capabilities/rave-audit.yaml
-  - type: NaftikoCapability
-    url: capabilities/rave-clinical-data.yaml
-  - type: NaftikoCapability
-    url: capabilities/rave-queries.yaml
-  - type: NaftikoCapability
-    url: capabilities/rave-sites.yaml
-  - type: NaftikoCapability
-    url: capabilities/rave-studies.yaml
-  - type: NaftikoCapability
-    url: capabilities/rave-subjects.yaml
-  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management.
-    APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research
-    organizations and pharmaceutical companies.
-common:
-- type: LinkedIn
-  url: https://www.linkedin.com/company/medidata-solutions
-- url: https://www.medidata.com/
-  type: Portal
-- url: https://www.medidata.com/
-  type: Website
-- url: https://www.medidata.com/en/life-science-resources/medidata-blog/
-  type: Blog
-- url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/openapi/medidata-rave-openapi.yml
-  type: OpenAPI
-- url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-schema/medidata-subject-schema.json
-  type: JSONSchema
-- url: https://raw.githubusercontent.com/api-evangelist/medidata/refs/heads/main/json-ld/medidata-context.jsonld
-  type: JSONLDContext
 maintainer:
   name: Kin Lane
   email: kin@apievangelist.com

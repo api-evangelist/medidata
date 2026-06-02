@@ -2,12 +2,20 @@
   "repo": "medidata",
   "feeds": [
     {
-      "source": "https://www.medidata.com/en/life-science-resources/medidata-blog/",
+      "source": "https://www.medidata.com/feed/",
       "feed_url": "https://www.medidata.com/feed/",
-      "title": "Medidata Solutions",
-      "saved": 44
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://www.medidata.com/en/life-science-resources/medidata-blog/",
+      "feed_url": "https://www.medidata.com/en/life-science-resources/medidata-blog/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
-  "post_count": 56,
-  "fetched": "2026-05-17T20:20:35Z"
+  "post_count": 57,
+  "fetched": "2026-06-01T23:35:02Z"
 }

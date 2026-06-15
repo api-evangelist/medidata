@@ -1,0 +1,831 @@
+"""
+Medidata Solutions GraphQL API Schema
+Covers clinical trial study design, patient data management, EDC data collection,
+site management, safety events, biomarkers, and clinical analytics.
+"""
+
+scalar DateTime
+scalar Date
+scalar JSON
+scalar Upload
+
+# ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum StudyStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  SUSPENDED
+  TERMINATED
+  ARCHIVED
+}
+
+enum SubjectStatus {
+  SCREENED
+  ENROLLED
+  RANDOMIZED
+  COMPLETED
+  WITHDRAWN
+  SCREEN_FAILED
+  LOST_TO_FOLLOW_UP
+}
+
+enum DataPointStatus {
+  NOT_ENTERED
+  ENTERED
+  VERIFIED
+  LOCKED
+  FROZEN
+}
+
+enum QueryStatus {
+  OPEN
+  ANSWERED
+  CLOSED
+  CANCELLED
+}
+
+enum VisitType {
+  SCREENING
+  BASELINE
+  TREATMENT
+  FOLLOW_UP
+  UNSCHEDULED
+  END_OF_STUDY
+}
+
+enum FormStatus {
+  INCOMPLETE
+  COMPLETE
+  LOCKED
+  FROZEN
+  VERIFIED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOCK
+  UNLOCK
+  FREEZE
+  UNFREEZE
+  VERIFY
+  UNVERIFY
+}
+
+enum SafetyEventSeverity {
+  MILD
+  MODERATE
+  SEVERE
+  LIFE_THREATENING
+  FATAL
+}
+
+enum SafetyEventCategory {
+  ADVERSE_EVENT
+  SERIOUS_ADVERSE_EVENT
+  ADVERSE_DEVICE_EFFECT
+  SERIOUS_ADVERSE_DEVICE_EFFECT
+}
+
+enum SafetyEventOutcome {
+  RECOVERED
+  RECOVERING
+  NOT_RECOVERED
+  SEQUELAE
+  FATAL
+  UNKNOWN
+}
+
+enum RandomizationMethod {
+  SIMPLE
+  BLOCK
+  STRATIFIED
+  ADAPTIVE
+}
+
+enum SiteStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+  SUSPENDED
+}
+
+enum UserRole {
+  SPONSOR
+  CRA
+  INVESTIGATOR
+  COORDINATOR
+  DATA_MANAGER
+  BIOSTATISTICIAN
+  MEDICAL_MONITOR
+  REGULATORY
+}
+
+enum BiomarkerType {
+  GENOMIC
+  PROTEOMIC
+  METABOLOMIC
+  IMAGING
+  CLINICAL
+}
+
+# ─── Core Types ──────────────────────────────────────────────────────────────
+
+type Study {
+  id: ID!
+  name: String!
+  protocolNumber: String!
+  phase: String
+  therapeuticArea: String
+  indication: String
+  sponsor: Sponsor!
+  status: StudyStatus!
+  startDate: Date
+  endDate: Date
+  targetEnrollment: Int
+  currentEnrollment: Int
+  sites: [Site!]!
+  arms: [StudyArm!]!
+  visits: [VisitDefinition!]!
+  forms: [FormDefinition!]!
+  subjects: [Subject!]!
+  randomizationConfig: RandomizationConfig
+  regulatoryInfo: RegulatoryInfo
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Sponsor {
+  id: ID!
+  name: String!
+  code: String!
+  address: Address
+  contactEmail: String
+  studies: [Study!]!
+}
+
+type Site {
+  id: ID!
+  name: String!
+  siteNumber: String!
+  status: SiteStatus!
+  study: Study!
+  principalInvestigator: User!
+  coordinators: [User!]!
+  address: Address
+  country: String!
+  timezone: String
+  subjects: [Subject!]!
+  activationDate: Date
+  closeDate: Date
+  lastMonitoringVisit: Date
+}
+
+type Subject {
+  id: ID!
+  subjectKey: String!
+  site: Site!
+  study: Study!
+  status: SubjectStatus!
+  screeningDate: DateTime
+  enrollmentDate: DateTime
+  randomizationDate: DateTime
+  completionDate: DateTime
+  withdrawalDate: DateTime
+  withdrawalReason: String
+  arm: StudyArm
+  demographics: Demographics
+  visitForms: [SubjectVisitForm!]!
+  safetyEvents: [SafetyEvent!]!
+  concomitantMedications: [ConcomitantMedication!]!
+  biomarkers: [BiomarkerSample!]!
+  queries: [DataQuery!]!
+  auditTrail: [AuditEntry!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Demographics {
+  subjectId: ID!
+  dateOfBirth: Date
+  age: Int
+  sex: String
+  race: String
+  ethnicity: String
+  weight: Float
+  height: Float
+  bmi: Float
+}
+
+type StudyArm {
+  id: ID!
+  name: String!
+  description: String
+  treatmentCode: String
+  study: Study!
+  subjects: [Subject!]!
+  randomizationRatio: Float
+}
+
+# ─── Visit & Form Types ───────────────────────────────────────────────────────
+
+type VisitDefinition {
+  id: ID!
+  name: String!
+  visitType: VisitType!
+  day: Int
+  windowBefore: Int
+  windowAfter: Int
+  forms: [FormDefinition!]!
+  isRequired: Boolean!
+}
+
+type FormDefinition {
+  id: ID!
+  name: String!
+  oid: String!
+  version: String!
+  fields: [FieldDefinition!]!
+  isRepeating: Boolean!
+}
+
+type FieldDefinition {
+  id: ID!
+  name: String!
+  label: String!
+  dataType: String!
+  isRequired: Boolean!
+  codeList: [CodeListItem!]
+  validationRules: [ValidationRule!]!
+  units: String
+  form: FormDefinition!
+}
+
+type CodeListItem {
+  code: String!
+  decode: String!
+  orderNumber: Int
+}
+
+type ValidationRule {
+  id: ID!
+  expression: String!
+  errorMessage: String!
+  severity: String!
+}
+
+type SubjectVisitForm {
+  id: ID!
+  subject: Subject!
+  visitDefinition: VisitDefinition!
+  formDefinition: FormDefinition!
+  visitDate: DateTime
+  status: FormStatus!
+  dataPoints: [DataPoint!]!
+  queries: [DataQuery!]!
+  auditTrail: [AuditEntry!]!
+  completedAt: DateTime
+  lockedAt: DateTime
+  frozenAt: DateTime
+}
+
+type DataPoint {
+  id: ID!
+  field: FieldDefinition!
+  value: String
+  status: DataPointStatus!
+  visitForm: SubjectVisitForm!
+  auditTrail: [AuditEntry!]!
+  queries: [DataQuery!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─── Query / Discrepancy Types ────────────────────────────────────────────────
+
+type DataQuery {
+  id: ID!
+  queryText: String!
+  status: QueryStatus!
+  category: String
+  dataPoint: DataPoint
+  visitForm: SubjectVisitForm
+  subject: Subject!
+  raisedBy: User!
+  raisedAt: DateTime!
+  responses: [QueryResponse!]!
+  resolvedBy: User
+  resolvedAt: DateTime
+}
+
+type QueryResponse {
+  id: ID!
+  query: DataQuery!
+  responseText: String!
+  respondedBy: User!
+  respondedAt: DateTime!
+}
+
+# ─── Safety / AE Types ───────────────────────────────────────────────────────
+
+type SafetyEvent {
+  id: ID!
+  subject: Subject!
+  term: String!
+  preferredTerm: String
+  systemOrganClass: String
+  category: SafetyEventCategory!
+  severity: SafetyEventSeverity!
+  serious: Boolean!
+  seriousnessReasons: [String!]
+  startDate: Date
+  endDate: Date
+  ongoing: Boolean!
+  outcome: SafetyEventOutcome
+  relationshipToStudyDrug: String
+  actionTaken: String
+  reportedBy: User!
+  reportedAt: DateTime!
+  saeNarrative: String
+  meddraCode: String
+  auditTrail: [AuditEntry!]!
+}
+
+type ConcomitantMedication {
+  id: ID!
+  subject: Subject!
+  medicationName: String!
+  genericName: String
+  atcCode: String
+  dose: String
+  doseUnit: String
+  route: String
+  frequency: String
+  indication: String
+  startDate: Date
+  endDate: Date
+  ongoing: Boolean!
+  reportedAt: DateTime!
+}
+
+# ─── Randomization ────────────────────────────────────────────────────────────
+
+type RandomizationConfig {
+  id: ID!
+  study: Study!
+  method: RandomizationMethod!
+  blockSize: Int
+  stratificationFactors: [StratificationFactor!]!
+  seed: Int
+}
+
+type StratificationFactor {
+  id: ID!
+  name: String!
+  values: [String!]!
+}
+
+type RandomizationEvent {
+  id: ID!
+  subject: Subject!
+  arm: StudyArm!
+  randomizationNumber: String!
+  randomizedAt: DateTime!
+  randomizedBy: User!
+  stratificationValues: JSON
+}
+
+# ─── Users & Roles ───────────────────────────────────────────────────────────
+
+type User {
+  id: ID!
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: UserRole!
+  sites: [Site!]!
+  studies: [Study!]!
+  active: Boolean!
+  lastLogin: DateTime
+  createdAt: DateTime!
+}
+
+type UserAssignment {
+  id: ID!
+  user: User!
+  study: Study!
+  site: Site
+  role: UserRole!
+  assignedAt: DateTime!
+  expiresAt: DateTime
+}
+
+# ─── Audit Trail ─────────────────────────────────────────────────────────────
+
+type AuditEntry {
+  id: ID!
+  action: AuditAction!
+  entityType: String!
+  entityId: ID!
+  field: String
+  oldValue: String
+  newValue: String
+  performedBy: User!
+  performedAt: DateTime!
+  reason: String
+  ipAddress: String
+}
+
+# ─── Biomarkers ──────────────────────────────────────────────────────────────
+
+type BiomarkerSample {
+  id: ID!
+  subject: Subject!
+  sampleType: BiomarkerType!
+  collectionDate: DateTime!
+  labId: String
+  assayName: String!
+  result: String
+  unit: String
+  referenceRange: String
+  abnormalFlag: String
+  status: String
+  collectedBy: User!
+}
+
+type GenomicData {
+  id: ID!
+  sample: BiomarkerSample!
+  geneSymbol: String!
+  variantType: String
+  chromosome: String
+  position: Int
+  referenceAllele: String
+  alternateAllele: String
+  zygosity: String
+  clinicalSignificance: String
+}
+
+# ─── Regulatory ──────────────────────────────────────────────────────────────
+
+type RegulatoryInfo {
+  id: ID!
+  study: Study!
+  indNumber: String
+  ctNumber: String
+  eudractNumber: String
+  irbApprovalNumber: String
+  irbApprovalDate: Date
+  regulatoryAuthority: String
+  submissionDate: Date
+}
+
+type RegulatorySubmission {
+  id: ID!
+  study: Study!
+  submissionType: String!
+  submissionDate: DateTime!
+  submittedBy: User!
+  status: String!
+  regulatoryAuthority: String!
+  responseDate: DateTime
+  responseStatus: String
+  comments: String
+}
+
+# ─── Clinical Analytics ───────────────────────────────────────────────────────
+
+type EnrollmentMetric {
+  study: Study!
+  site: Site
+  date: Date!
+  screened: Int!
+  enrolled: Int!
+  randomized: Int!
+  completed: Int!
+  withdrawn: Int!
+  screenFailures: Int!
+}
+
+type DataQualityMetric {
+  study: Study!
+  site: Site
+  date: Date!
+  totalDataPoints: Int!
+  openQueries: Int!
+  closedQueries: Int!
+  queryRate: Float!
+  missingDataRate: Float!
+  protocolDeviations: Int!
+}
+
+type SafetyMetric {
+  study: Study!
+  site: Site
+  date: Date!
+  totalAEs: Int!
+  totalSAEs: Int!
+  relatedAEs: Int!
+  relatedSAEs: Int!
+  deathsReported: Int!
+}
+
+# ─── Address ─────────────────────────────────────────────────────────────────
+
+type Address {
+  street1: String
+  street2: String
+  city: String
+  state: String
+  postalCode: String
+  country: String!
+}
+
+# ─── Protocol Deviation ───────────────────────────────────────────────────────
+
+type ProtocolDeviation {
+  id: ID!
+  subject: Subject!
+  site: Site!
+  deviationType: String!
+  description: String!
+  deviationDate: Date!
+  discoveredDate: Date!
+  impact: String
+  correctionAction: String
+  reportedBy: User!
+  reportedAt: DateTime!
+  status: String!
+}
+
+# ─── Lab Data ─────────────────────────────────────────────────────────────────
+
+type LabResult {
+  id: ID!
+  subject: Subject!
+  panelName: String!
+  testName: String!
+  result: String!
+  unit: String
+  referenceRangeLow: String
+  referenceRangeHigh: String
+  abnormalFlag: String
+  collectionDate: DateTime!
+  reportDate: DateTime
+  labName: String
+  status: DataPointStatus!
+}
+
+# ─── ECG ─────────────────────────────────────────────────────────────────────
+
+type ECGResult {
+  id: ID!
+  subject: Subject!
+  recordingDate: DateTime!
+  heartRate: Float
+  prInterval: Float
+  qrsInterval: Float
+  qtInterval: Float
+  qtcInterval: Float
+  rhythm: String
+  interpretation: String
+  clinicallySignificant: Boolean
+}
+
+# ─── Vital Signs ──────────────────────────────────────────────────────────────
+
+type VitalSign {
+  id: ID!
+  subject: Subject!
+  measurementDate: DateTime!
+  systolicBP: Float
+  diastolicBP: Float
+  heartRate: Float
+  temperature: Float
+  temperatureUnit: String
+  respiratoryRate: Float
+  oxygenSaturation: Float
+  weight: Float
+  height: Float
+}
+
+# ─── Pagination & Connection Types ───────────────────────────────────────────
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  totalCount: Int!
+}
+
+type StudyConnection {
+  edges: [StudyEdge!]!
+  pageInfo: PageInfo!
+}
+
+type StudyEdge {
+  cursor: String!
+  node: Study!
+}
+
+type SubjectConnection {
+  edges: [SubjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SubjectEdge {
+  cursor: String!
+  node: Subject!
+}
+
+type SafetyEventConnection {
+  edges: [SafetyEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SafetyEventEdge {
+  cursor: String!
+  node: SafetyEvent!
+}
+
+# ─── Input Types ─────────────────────────────────────────────────────────────
+
+input StudyFilterInput {
+  status: StudyStatus
+  therapeuticArea: String
+  phase: String
+  sponsorId: ID
+  startDateFrom: Date
+  startDateTo: Date
+}
+
+input SubjectFilterInput {
+  status: SubjectStatus
+  siteId: ID
+  armId: ID
+  enrolledFrom: DateTime
+  enrolledTo: DateTime
+}
+
+input SafetyEventFilterInput {
+  category: SafetyEventCategory
+  severity: SafetyEventSeverity
+  serious: Boolean
+  subjectId: ID
+  siteId: ID
+  startDateFrom: Date
+  startDateTo: Date
+}
+
+input CreateSubjectInput {
+  siteId: ID!
+  subjectKey: String!
+  screeningDate: DateTime
+}
+
+input UpdateSubjectInput {
+  status: SubjectStatus
+  armId: ID
+  withdrawalReason: String
+}
+
+input CreateDataQueryInput {
+  subjectId: ID!
+  dataPointId: ID
+  visitFormId: ID
+  queryText: String!
+  category: String
+}
+
+input ReportSafetyEventInput {
+  subjectId: ID!
+  term: String!
+  category: SafetyEventCategory!
+  severity: SafetyEventSeverity!
+  serious: Boolean!
+  startDate: Date
+  ongoing: Boolean!
+  relationshipToStudyDrug: String
+}
+
+input BiomarkerSampleInput {
+  subjectId: ID!
+  sampleType: BiomarkerType!
+  collectionDate: DateTime!
+  assayName: String!
+  result: String
+  unit: String
+  labId: String
+}
+
+# ─── Root Types ──────────────────────────────────────────────────────────────
+
+type Query {
+  # Study queries
+  study(id: ID!): Study
+  studies(filter: StudyFilterInput, first: Int, after: String): StudyConnection!
+
+  # Site queries
+  site(id: ID!): Site
+  sites(studyId: ID!): [Site!]!
+
+  # Subject queries
+  subject(id: ID!): Subject
+  subjects(studyId: ID!, filter: SubjectFilterInput, first: Int, after: String): SubjectConnection!
+
+  # Form & data queries
+  visitForm(id: ID!): SubjectVisitForm
+  dataPoint(id: ID!): DataPoint
+  dataQuery(id: ID!): DataQuery
+  openQueries(studyId: ID!, siteId: ID): [DataQuery!]!
+
+  # Safety queries
+  safetyEvent(id: ID!): SafetyEvent
+  safetyEvents(studyId: ID!, filter: SafetyEventFilterInput, first: Int, after: String): SafetyEventConnection!
+
+  # Biomarker queries
+  biomarkerSample(id: ID!): BiomarkerSample
+  biomarkerSamples(subjectId: ID!): [BiomarkerSample!]!
+
+  # Audit trail
+  auditTrail(entityType: String!, entityId: ID!): [AuditEntry!]!
+
+  # Analytics
+  enrollmentMetrics(studyId: ID!, siteId: ID, fromDate: Date, toDate: Date): [EnrollmentMetric!]!
+  dataQualityMetrics(studyId: ID!, siteId: ID, fromDate: Date, toDate: Date): [DataQualityMetric!]!
+  safetyMetrics(studyId: ID!, siteId: ID, fromDate: Date, toDate: Date): [SafetyMetric!]!
+
+  # User queries
+  user(id: ID!): User
+  users(studyId: ID, siteId: ID, role: UserRole): [User!]!
+
+  # Regulatory
+  regulatoryInfo(studyId: ID!): RegulatoryInfo
+  regulatorySubmissions(studyId: ID!): [RegulatorySubmission!]!
+
+  # Lab & clinical
+  labResults(subjectId: ID!): [LabResult!]!
+  vitalSigns(subjectId: ID!): [VitalSign!]!
+  ecgResults(subjectId: ID!): [ECGResult!]!
+
+  # Protocol deviations
+  protocolDeviations(studyId: ID!, siteId: ID): [ProtocolDeviation!]!
+
+  # Randomization
+  randomizationEvents(studyId: ID!): [RandomizationEvent!]!
+}
+
+type Mutation {
+  # Subject management
+  createSubject(input: CreateSubjectInput!): Subject!
+  updateSubject(id: ID!, input: UpdateSubjectInput!): Subject!
+  withdrawSubject(id: ID!, reason: String!): Subject!
+  randomizeSubject(subjectId: ID!, armId: ID!): RandomizationEvent!
+
+  # Data entry
+  enterDataPoint(visitFormId: ID!, fieldId: ID!, value: String!, reason: String): DataPoint!
+  updateDataPoint(id: ID!, value: String!, reason: String!): DataPoint!
+  lockForm(visitFormId: ID!): SubjectVisitForm!
+  unlockForm(visitFormId: ID!, reason: String!): SubjectVisitForm!
+  freezeForm(visitFormId: ID!): SubjectVisitForm!
+
+  # Query management
+  createDataQuery(input: CreateDataQueryInput!): DataQuery!
+  respondToQuery(queryId: ID!, responseText: String!): QueryResponse!
+  closeQuery(queryId: ID!): DataQuery!
+  cancelQuery(queryId: ID!): DataQuery!
+
+  # Safety reporting
+  reportSafetyEvent(input: ReportSafetyEventInput!): SafetyEvent!
+  updateSafetyEvent(id: ID!, severity: SafetyEventSeverity, outcome: SafetyEventOutcome, endDate: Date): SafetyEvent!
+
+  # Biomarker recording
+  recordBiomarkerSample(input: BiomarkerSampleInput!): BiomarkerSample!
+
+  # User management
+  assignUserToSite(userId: ID!, siteId: ID!, role: UserRole!): UserAssignment!
+  removeUserFromSite(userId: ID!, siteId: ID!): Boolean!
+
+  # Protocol deviations
+  reportProtocolDeviation(subjectId: ID!, siteId: ID!, deviationType: String!, description: String!, deviationDate: Date!): ProtocolDeviation!
+}
+
+type Subscription {
+  # Real-time SAE alerts
+  safetyEventCreated(studyId: ID!): SafetyEvent!
+
+  # New query notifications
+  queryCreated(studyId: ID!, siteId: ID): DataQuery!
+  queryResponded(studyId: ID!): DataQuery!
+
+  # Enrollment updates
+  subjectEnrolled(studyId: ID!): Subject!
+  subjectStatusChanged(studyId: ID!): Subject!
+
+  # Data lock notifications
+  formLocked(studyId: ID!, siteId: ID): SubjectVisitForm!
+}

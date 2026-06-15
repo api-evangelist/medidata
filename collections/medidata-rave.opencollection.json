@@ -1,0 +1,313 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Medidata Rave EDC REST API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Studies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List studies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/",
+            "params": [
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include additional metadata (e.g., include=subjectCount)"
+              }
+            ]
+          },
+          "docs": "Return a list of clinical studies accessible with the provided credentials. Each study entry includes the study name, OID, and environment (Production, UAT, etc.)."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Subjects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List subjects in a study",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/Subjects",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path",
+                "description": "Study OID (e.g., Mediflex(Dev))"
+              },
+              {
+                "name": "Status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "SiteID",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve all subjects enrolled in the specified study. Returns subject key, site ID, status, and enrollment date."
+        },
+        {
+          "info": {
+            "name": "Create or update a subject",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/Subjects",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enroll a new subject or update an existing subject's demographic data. Subject key must be provided if updating."
+        },
+        {
+          "info": {
+            "name": "Get subject details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/Subjects/:subjectKey",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "subjectKey",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve full details of a single subject including all CRF data, events, and queries."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Clinical Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get clinical data (CRF data) for a subject",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/Subjects/:subjectKey/ClinicalData",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "subjectKey",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "formOID",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific form OID"
+              },
+              {
+                "name": "EventRepeatKey",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve all clinical data (case report form field values) for a subject across all visit events and CRF pages."
+        },
+        {
+          "info": {
+            "name": "Submit clinical data for a subject",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/Subjects/:subjectKey/ClinicalData",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "subjectKey",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit or update CRF field values for a subject. Supports ODM-compliant clinical data XML or JSON submission."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Queries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List data queries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/Queries",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "Status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "SiteID",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "SubjectKey",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve open and closed data queries (discrepancies) for the study. Queries are created by data managers or automatically by edit checks."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Audit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get audit trail records",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/AuditRecords",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "SubjectKey",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "SiteID",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "StartDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "EndDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "PageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve audit trail records for data changes in the study. Provides a 21 CFR Part 11 / GCP-compliant audit history."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Sites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List study sites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{tenant}.medidata.com/RaveWebServices/studies/:studyOID/Sites",
+            "params": [
+              {
+                "name": "studyOID",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve all sites (investigator sites) enrolled in the study."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

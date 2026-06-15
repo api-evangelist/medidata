@@ -1,0 +1,1609 @@
+{
+  "item": [
+    {
+      "id": "5b51493d-71d9-40da-94b4-8808e4714fc1",
+      "name": "Audit",
+      "description": {
+        "content": "Audit trail access for 21 CFR Part 11 compliance",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "223d8ae5-4b22-4a95-bab4-d49eb4619081",
+          "name": "Get audit trail records",
+          "request": {
+            "name": "Get audit trail records",
+            "description": {
+              "content": "Retrieve audit trail records for data changes in the study. Provides a 21 CFR Part 11 / GCP-compliant audit history.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "AuditRecords"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "SubjectKey",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "SiteID",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "StartDate",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "EndDate",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "PageSize",
+                  "value": "100"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6fc607a0-cf38-4b9e-a421-2eb5b7cf527f",
+              "name": "Audit records",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "AuditRecords"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "SubjectKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "SiteID",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "StartDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "EndDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"records\": [\n    {\n      \"auditID\": 9122,\n      \"subjectKey\": \"string\",\n      \"siteID\": \"string\",\n      \"formOID\": \"string\",\n      \"fieldOID\": \"string\",\n      \"oldValue\": \"string\",\n      \"newValue\": \"string\",\n      \"auditType\": \"string\",\n      \"userID\": \"string\",\n      \"auditDateTime\": \"2025-08-14T19:01:25.075Z\",\n      \"reason\": \"string\"\n    },\n    {\n      \"auditID\": 8141,\n      \"subjectKey\": \"string\",\n      \"siteID\": \"string\",\n      \"formOID\": \"string\",\n      \"fieldOID\": \"string\",\n      \"oldValue\": \"string\",\n      \"newValue\": \"string\",\n      \"auditType\": \"string\",\n      \"userID\": \"string\",\n      \"auditDateTime\": \"1974-01-20T22:13:57.101Z\",\n      \"reason\": \"string\"\n    }\n  ],\n  \"totalCount\": 6936\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e7a980eb-de24-4018-8527-c002f2ce7e0a",
+      "name": "Clinical Data",
+      "description": {
+        "content": "CRF data entry and retrieval",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d64b5075-494c-4396-a288-dcd8434bfac3",
+          "name": "Get clinical data (CRF data) for a subject",
+          "request": {
+            "name": "Get clinical data (CRF data) for a subject",
+            "description": {
+              "content": "Retrieve all clinical data (case report form field values) for a subject across all visit events and CRF pages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "Subjects",
+                ":subjectKey",
+                "ClinicalData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "formOID",
+                  "value": "<string>",
+                  "description": "Filter to a specific form OID"
+                },
+                {
+                  "disabled": false,
+                  "key": "EventRepeatKey",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subjectKey",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4b3d87d8-a468-4b5f-ad9c-00ab8bd23e3a",
+              "name": "Subject clinical data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects",
+                    ":subjectKey",
+                    "ClinicalData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "formOID",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "EventRepeatKey",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subjectKey",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"subjectKey\": \"string\",\n  \"studyOID\": \"string\",\n  \"events\": [\n    {\n      \"eventOID\": \"string\",\n      \"eventName\": \"string\",\n      \"eventDate\": \"2000-03-21\",\n      \"repeatKey\": \"string\",\n      \"forms\": [\n        {\n          \"formOID\": \"string\",\n          \"formName\": \"string\",\n          \"fields\": [\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"formOID\": \"string\",\n          \"formName\": \"string\",\n          \"fields\": [\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"eventOID\": \"string\",\n      \"eventName\": \"string\",\n      \"eventDate\": \"2026-03-23\",\n      \"repeatKey\": \"string\",\n      \"forms\": [\n        {\n          \"formOID\": \"string\",\n          \"formName\": \"string\",\n          \"fields\": [\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"formOID\": \"string\",\n          \"formName\": \"string\",\n          \"fields\": [\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"fieldOID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dataEntryDateTime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"enteredBy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a308ddd-9e37-4ff4-8e96-1489c3a14f55",
+          "name": "Submit clinical data for a subject",
+          "request": {
+            "name": "Submit clinical data for a subject",
+            "description": {
+              "content": "Submit or update CRF field values for a subject. Supports ODM-compliant clinical data XML or JSON submission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "Subjects",
+                ":subjectKey",
+                "ClinicalData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subjectKey",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    {\n      \"eventOID\": \"<string>\",\n      \"forms\": [\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        },\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        }\n      ],\n      \"eventDate\": \"<date>\",\n      \"repeatKey\": \"<string>\"\n    },\n    {\n      \"eventOID\": \"<string>\",\n      \"forms\": [\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        },\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        }\n      ],\n      \"eventDate\": \"<date>\",\n      \"repeatKey\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "90f943d9-520c-4827-8087-ac625f21a411",
+              "name": "Data submitted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects",
+                    ":subjectKey",
+                    "ClinicalData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subjectKey",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"eventOID\": \"<string>\",\n      \"forms\": [\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        },\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        }\n      ],\n      \"eventDate\": \"<date>\",\n      \"repeatKey\": \"<string>\"\n    },\n    {\n      \"eventOID\": \"<string>\",\n      \"forms\": [\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        },\n        {\n          \"formOID\": \"<string>\",\n          \"fields\": [\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"fieldOID\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        }\n      ],\n      \"eventDate\": \"<date>\",\n      \"repeatKey\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"Failed\",\n  \"message\": \"string\",\n  \"subjectKey\": \"string\",\n  \"warnings\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8dc0226e-8f36-47b1-aa30-c1fb66296aea",
+      "name": "Queries",
+      "description": {
+        "content": "Data query management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "79010a72-2c59-4f9a-8f03-4a38134379bd",
+          "name": "List data queries",
+          "request": {
+            "name": "List data queries",
+            "description": {
+              "content": "Retrieve open and closed data queries (discrepancies) for the study. Queries are created by data managers or automatically by edit checks.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "Queries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "SiteID",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "SubjectKey",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e089f63c-5c3d-42fc-b407-ebef9e26ed41",
+              "name": "Query list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Queries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "SiteID",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "SubjectKey",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"queries\": [\n    {\n      \"queryID\": 7953,\n      \"subjectKey\": \"string\",\n      \"siteID\": \"string\",\n      \"formOID\": \"string\",\n      \"fieldOID\": \"string\",\n      \"status\": \"Cancelled\",\n      \"message\": \"string\",\n      \"createdBy\": \"string\",\n      \"createdDate\": \"1984-04-15T01:07:36.752Z\",\n      \"closedDate\": \"2013-09-03T23:52:02.009Z\"\n    },\n    {\n      \"queryID\": 1516,\n      \"subjectKey\": \"string\",\n      \"siteID\": \"string\",\n      \"formOID\": \"string\",\n      \"fieldOID\": \"string\",\n      \"status\": \"Answered\",\n      \"message\": \"string\",\n      \"createdBy\": \"string\",\n      \"createdDate\": \"1948-03-16T08:39:12.935Z\",\n      \"closedDate\": \"1952-03-17T19:52:38.256Z\"\n    }\n  ],\n  \"totalCount\": 7639\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f6d2831e-008d-4ef9-b81e-5521f80724e0",
+      "name": "Sites",
+      "description": {
+        "content": "Investigator site management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fb5be035-2d96-4f08-93c8-33c197f23d80",
+          "name": "List study sites",
+          "request": {
+            "name": "List study sites",
+            "description": {
+              "content": "Retrieve all sites (investigator sites) enrolled in the study.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "Sites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7b97597e-e764-4884-a289-910cebbdc9ea",
+              "name": "Site list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Sites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sites\": [\n    {\n      \"siteID\": \"string\",\n      \"siteName\": \"string\",\n      \"investigator\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"country\": \"string\",\n      \"status\": \"Inactive\"\n    },\n    {\n      \"siteID\": \"string\",\n      \"siteName\": \"string\",\n      \"investigator\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"country\": \"string\",\n      \"status\": \"Inactive\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7060a73c-51b3-4d03-bc06-a425835c9d14",
+      "name": "Studies",
+      "description": {
+        "content": "Clinical study management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "755e4ef2-29cf-4ad8-8e11-711587cd1d94",
+          "name": "List studies",
+          "request": {
+            "name": "List studies",
+            "description": {
+              "content": "Return a list of clinical studies accessible with the provided credentials. Each study entry includes the study name, OID, and environment (Production, UAT, etc.).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "Include additional metadata (e.g., include=subjectCount)"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "665fcf89-01ac-431a-94ab-2ed2b305c635",
+              "name": "List of studies",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"studies\": [\n    {\n      \"studyOID\": \"string\",\n      \"studyName\": \"string\",\n      \"protocolName\": \"string\",\n      \"environment\": \"UAT\",\n      \"status\": \"Designing\",\n      \"createdDate\": \"1959-10-10T19:06:30.488Z\",\n      \"modifiedDate\": \"1984-10-29T18:10:49.133Z\"\n    },\n    {\n      \"studyOID\": \"string\",\n      \"studyName\": \"string\",\n      \"protocolName\": \"string\",\n      \"environment\": \"Production\",\n      \"status\": \"Archived\",\n      \"createdDate\": \"2006-07-08T14:28:14.132Z\",\n      \"modifiedDate\": \"1973-12-18T14:29:43.594Z\"\n    }\n  ],\n  \"totalCount\": 1534\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33f39ae4-7db4-4b12-9f27-f5a437bddb4f",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ErrorCode\": 2767,\n  \"ErrorDescription\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8b9b273a-388c-428f-a678-61160a40d3d6",
+      "name": "Subjects",
+      "description": {
+        "content": "Trial subject enrollment and management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ba8447a9-0934-484c-ab48-2dc283629373",
+          "name": "List subjects in a study",
+          "request": {
+            "name": "List subjects in a study",
+            "description": {
+              "content": "Retrieve all subjects enrolled in the specified study. Returns subject key, site ID, status, and enrollment date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "Subjects"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "SiteID",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) Study OID (e.g., Mediflex(Dev))"
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5d008299-311b-46f5-8a1a-c08d1d201558",
+              "name": "Subject list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "SiteID",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) Study OID (e.g., Mediflex(Dev))"
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"subjects\": [\n    {\n      \"subjectKey\": \"string\",\n      \"siteID\": \"string\",\n      \"siteName\": \"string\",\n      \"status\": \"Inactive\",\n      \"enrollmentDate\": \"2020-06-18\",\n      \"screeningDate\": \"1988-04-25\",\n      \"initials\": \"string\",\n      \"studyOID\": \"string\"\n    },\n    {\n      \"subjectKey\": \"string\",\n      \"siteID\": \"string\",\n      \"siteName\": \"string\",\n      \"status\": \"Screened\",\n      \"enrollmentDate\": \"2010-03-10\",\n      \"screeningDate\": \"2013-05-14\",\n      \"initials\": \"string\",\n      \"studyOID\": \"string\"\n    }\n  ],\n  \"totalCount\": 1198\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "71108522-3e66-4757-9236-392e15d11ae1",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "SiteID",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) Study OID (e.g., Mediflex(Dev))"
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ErrorCode\": 2767,\n  \"ErrorDescription\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f080bc37-6453-4919-896b-33c27af1c2b9",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "SiteID",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) Study OID (e.g., Mediflex(Dev))"
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ErrorCode\": 2767,\n  \"ErrorDescription\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "56c3c711-f408-4aac-9e94-8d8aeff14bcd",
+          "name": "Create or update a subject",
+          "request": {
+            "name": "Create or update a subject",
+            "description": {
+              "content": "Enroll a new subject or update an existing subject's demographic data. Subject key must be provided if updating.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "Subjects"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteID\": \"<string>\",\n  \"subjectKey\": \"<string>\",\n  \"status\": \"<string>\",\n  \"screeningDate\": \"<date>\",\n  \"initials\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2fc45e57-a535-496c-8a76-2f62792d1d16",
+              "name": "Subject created or updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"siteID\": \"<string>\",\n  \"subjectKey\": \"<string>\",\n  \"status\": \"<string>\",\n  \"screeningDate\": \"<date>\",\n  \"initials\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"subjectKey\": \"string\",\n  \"siteID\": \"string\",\n  \"siteName\": \"string\",\n  \"status\": \"Failed\",\n  \"enrollmentDate\": \"2013-10-08\",\n  \"screeningDate\": \"1977-12-05\",\n  \"initials\": \"string\",\n  \"studyOID\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2d44fef-05df-4ddc-9fb8-8ad520651794",
+              "name": "Invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"siteID\": \"<string>\",\n  \"subjectKey\": \"<string>\",\n  \"status\": \"<string>\",\n  \"screeningDate\": \"<date>\",\n  \"initials\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ErrorCode\": 2767,\n  \"ErrorDescription\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0e0160e1-6d3f-4a45-9e77-db02d65e490b",
+          "name": "Get subject details",
+          "request": {
+            "name": "Get subject details",
+            "description": {
+              "content": "Retrieve full details of a single subject including all CRF data, events, and queries.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":studyOID",
+                "Subjects",
+                ":subjectKey"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "studyOID",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subjectKey",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Your Medidata Rave instance subdomain",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8c560e95-6b3f-4648-bc05-a9aaf2b0fa4c",
+              "name": "Subject details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects",
+                    ":subjectKey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subjectKey",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"subjectKey\": \"string\",\n  \"siteID\": \"string\",\n  \"siteName\": \"string\",\n  \"status\": \"Failed\",\n  \"enrollmentDate\": \"2013-10-08\",\n  \"screeningDate\": \"1977-12-05\",\n  \"initials\": \"string\",\n  \"studyOID\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c62f128d-b418-42f6-b78b-dca23cee5259",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":studyOID",
+                    "Subjects",
+                    ":subjectKey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "studyOID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subjectKey",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Your Medidata Rave instance subdomain",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ErrorCode\": 2767,\n  \"ErrorDescription\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your Medidata Rave instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "medidatatrials",
+      "key": "tenant"
+    },
+    {
+      "type": "string",
+      "value": "https://{{tenant}}.medidata.com/RaveWebServices/studies",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6017a399-ff32-4c46-8c42-0bc7ba12d676",
+    "name": "Medidata Rave EDC REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.\n\nContact Support:\n Name: Medidata Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/medidata-rave-openapi.yml
+schemes:
+- name: OAuth2
+  source: openapi/medidata-rave-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://identity.medidata.com/connect/token
+scopes:
+- scope: rave.read
+  description: Read access to Rave study data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/medidata-rave-openapi.yml
+- scope: rave.write
+  description: Write access to Rave study data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/medidata-rave-openapi.yml

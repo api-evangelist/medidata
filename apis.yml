@@ -27,6 +27,8 @@ apis:
     report forms, patient data, queries, and audit trails for clinical research organizations
     and pharmaceutical companies.
 common:
+- type: OAuthScopes
+  url: scopes/medidata-scopes.yml
 - type: GitHubOrganization
   url: https://github.com/mdsol
 - type: LinkedIn

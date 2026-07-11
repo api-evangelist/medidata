@@ -27,6 +27,10 @@ apis:
     report forms, patient data, queries, and audit trails for clinical research organizations
     and pharmaceutical companies.
 common:
+- type: DomainSecurity
+  url: security/medidata-domain-security.yml
+- type: Authentication
+  url: authentication/medidata-authentication.yml
 - type: OAuthScopes
   url: scopes/medidata-scopes.yml
 - type: GitHubOrganization

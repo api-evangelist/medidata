@@ -27,6 +27,8 @@ apis:
     report forms, patient data, queries, and audit trails for clinical research organizations
     and pharmaceutical companies.
 common:
+- type: AgenticAccess
+  url: agentic-access/medidata-agentic-access.yml
 - type: DomainSecurity
   url: security/medidata-domain-security.yml
 - type: Authentication

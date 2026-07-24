@@ -1,0 +1,218 @@
+openapi: 3.1.0
+info:
+  title: Medidata Rave EDC REST Audit Subjects API
+  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
+  version: 1.0.0
+  contact:
+    name: Medidata Support
+    url: https://www.medidata.com/support
+  license:
+    name: Proprietary
+    url: https://www.medidata.com/terms
+servers:
+- url: https://{tenant}.medidata.com/RaveWebServices/studies
+  variables:
+    tenant:
+      default: medidatatrials
+      description: Your Medidata Rave instance subdomain
+- url: https://developer.medidata.com/api/v2
+  description: Medidata Developer API v2
+security:
+- BasicAuth: []
+- OAuth2: []
+tags:
+- name: Subjects
+  description: Trial subject enrollment and management
+paths:
+  /{studyOID}/Subjects:
+    get:
+      operationId: listSubjects
+      summary: List subjects in a study
+      description: Retrieve all subjects enrolled in the specified study. Returns subject key, site ID, status, and enrollment date.
+      tags:
+      - Subjects
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Study OID (e.g., Mediflex(Dev))
+      - name: Status
+        in: query
+        schema:
+          type: string
+          enum:
+          - Active
+          - Inactive
+          - Screened
+          - Failed
+      - name: SiteID
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Subject list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createSubject
+      summary: Create or update a subject
+      description: Enroll a new subject or update an existing subject's demographic data. Subject key must be provided if updating.
+      tags:
+      - Subjects
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectCreateRequest'
+      responses:
+        '200':
+          description: Subject created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /{studyOID}/Subjects/{subjectKey}:
+    get:
+      operationId: getSubject
+      summary: Get subject details
+      description: Retrieve full details of a single subject including all CRF data, events, and queries.
+      tags:
+      - Subjects
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: subjectKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Subject details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    SubjectCreateRequest:
+      type: object
+      required:
+      - siteID
+      properties:
+        subjectKey:
+          type: string
+          description: Provide to update existing subject; omit to auto-assign
+        siteID:
+          type: string
+        status:
+          type: string
+        screeningDate:
+          type: string
+          format: date
+        initials:
+          type: string
+    SubjectListResponse:
+      type: object
+      properties:
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subject'
+        totalCount:
+          type: integer
+    Subject:
+      type: object
+      properties:
+        subjectKey:
+          type: string
+          description: Unique subject identifier within the study
+        siteID:
+          type: string
+        siteName:
+          type: string
+        status:
+          type: string
+          enum:
+          - Active
+          - Inactive
+          - Screened
+          - Failed
+          - Randomized
+          - Completed
+          - Withdrawn
+        enrollmentDate:
+          type: string
+          format: date
+        screeningDate:
+          type: string
+          format: date
+        initials:
+          type: string
+        studyOID:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+        ErrorDescription:
+          type: string
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Medidata Rave username and password
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.medidata.com/connect/token
+          scopes:
+            rave.read: Read access to Rave study data
+            rave.write: Write access to Rave study data
+externalDocs:
+  description: Medidata Developer Documentation
+  url: https://www.medidata.com/

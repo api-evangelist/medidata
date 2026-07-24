@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: Medidata Rave EDC REST Audit Sites API
+  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
+  version: 1.0.0
+  contact:
+    name: Medidata Support
+    url: https://www.medidata.com/support
+  license:
+    name: Proprietary
+    url: https://www.medidata.com/terms
+servers:
+- url: https://{tenant}.medidata.com/RaveWebServices/studies
+  variables:
+    tenant:
+      default: medidatatrials
+      description: Your Medidata Rave instance subdomain
+- url: https://developer.medidata.com/api/v2
+  description: Medidata Developer API v2
+security:
+- BasicAuth: []
+- OAuth2: []
+tags:
+- name: Sites
+  description: Investigator site management
+paths:
+  /{studyOID}/Sites:
+    get:
+      operationId: listSites
+      summary: List study sites
+      description: Retrieve all sites (investigator sites) enrolled in the study.
+      tags:
+      - Sites
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Site list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteListResponse'
+components:
+  schemas:
+    SiteListResponse:
+      type: object
+      properties:
+        sites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Site'
+    Site:
+      type: object
+      properties:
+        siteID:
+          type: string
+        siteName:
+          type: string
+        investigator:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        status:
+          type: string
+          enum:
+          - Active
+          - Inactive
+          - Closed
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Medidata Rave username and password
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.medidata.com/connect/token
+          scopes:
+            rave.read: Read access to Rave study data
+            rave.write: Write access to Rave study data
+externalDocs:
+  description: Medidata Developer Documentation
+  url: https://www.medidata.com/

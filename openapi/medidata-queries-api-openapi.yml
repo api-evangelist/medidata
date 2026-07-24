@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Medidata Rave EDC REST Audit Queries API
+  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
+  version: 1.0.0
+  contact:
+    name: Medidata Support
+    url: https://www.medidata.com/support
+  license:
+    name: Proprietary
+    url: https://www.medidata.com/terms
+servers:
+- url: https://{tenant}.medidata.com/RaveWebServices/studies
+  variables:
+    tenant:
+      default: medidatatrials
+      description: Your Medidata Rave instance subdomain
+- url: https://developer.medidata.com/api/v2
+  description: Medidata Developer API v2
+security:
+- BasicAuth: []
+- OAuth2: []
+tags:
+- name: Queries
+  description: Data query management
+paths:
+  /{studyOID}/Queries:
+    get:
+      operationId: listQueries
+      summary: List data queries
+      description: Retrieve open and closed data queries (discrepancies) for the study. Queries are created by data managers or automatically by edit checks.
+      tags:
+      - Queries
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Status
+        in: query
+        schema:
+          type: string
+          enum:
+          - Open
+          - Answered
+          - Closed
+          - Cancelled
+      - name: SiteID
+        in: query
+        schema:
+          type: string
+      - name: SubjectKey
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Query list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryListResponse'
+components:
+  schemas:
+    QueryListResponse:
+      type: object
+      properties:
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Query'
+        totalCount:
+          type: integer
+    Query:
+      type: object
+      properties:
+        queryID:
+          type: integer
+        subjectKey:
+          type: string
+        siteID:
+          type: string
+        formOID:
+          type: string
+        fieldOID:
+          type: string
+        status:
+          type: string
+          enum:
+          - Open
+          - Answered
+          - Closed
+          - Cancelled
+        message:
+          type: string
+        createdBy:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        closedDate:
+          type: string
+          format: date-time
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Medidata Rave username and password
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.medidata.com/connect/token
+          scopes:
+            rave.read: Read access to Rave study data
+            rave.write: Write access to Rave study data
+externalDocs:
+  description: Medidata Developer Documentation
+  url: https://www.medidata.com/

@@ -1,0 +1,228 @@
+openapi: 3.1.0
+info:
+  title: Medidata Rave EDC REST Audit Clinical Data API
+  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
+  version: 1.0.0
+  contact:
+    name: Medidata Support
+    url: https://www.medidata.com/support
+  license:
+    name: Proprietary
+    url: https://www.medidata.com/terms
+servers:
+- url: https://{tenant}.medidata.com/RaveWebServices/studies
+  variables:
+    tenant:
+      default: medidatatrials
+      description: Your Medidata Rave instance subdomain
+- url: https://developer.medidata.com/api/v2
+  description: Medidata Developer API v2
+security:
+- BasicAuth: []
+- OAuth2: []
+tags:
+- name: Clinical Data
+  description: CRF data entry and retrieval
+paths:
+  /{studyOID}/Subjects/{subjectKey}/ClinicalData:
+    get:
+      operationId: getSubjectClinicalData
+      summary: Get clinical data (CRF data) for a subject
+      description: Retrieve all clinical data (case report form field values) for a subject across all visit events and CRF pages.
+      tags:
+      - Clinical Data
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: subjectKey
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: formOID
+        in: query
+        schema:
+          type: string
+        description: Filter to a specific form OID
+      - name: EventRepeatKey
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Subject clinical data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClinicalDataResponse'
+    post:
+      operationId: submitClinicalData
+      summary: Submit clinical data for a subject
+      description: Submit or update CRF field values for a subject. Supports ODM-compliant clinical data XML or JSON submission.
+      tags:
+      - Clinical Data
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: subjectKey
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClinicalDataSubmission'
+      responses:
+        '200':
+          description: Data submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponse'
+components:
+  schemas:
+    ClinicalDataResponse:
+      type: object
+      properties:
+        subjectKey:
+          type: string
+        studyOID:
+          type: string
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClinicalDataEvent'
+    SubmissionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - Success
+          - Partial
+          - Failed
+        message:
+          type: string
+        subjectKey:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+    ClinicalDataEvent:
+      type: object
+      properties:
+        eventOID:
+          type: string
+        eventName:
+          type: string
+        eventDate:
+          type: string
+          format: date
+        repeatKey:
+          type: string
+        forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CRFForm'
+    CRFForm:
+      type: object
+      properties:
+        formOID:
+          type: string
+        formName:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CRFField'
+    ClinicalDataSubmission:
+      type: object
+      required:
+      - events
+      properties:
+        events:
+          type: array
+          items:
+            type: object
+            required:
+            - eventOID
+            - forms
+            properties:
+              eventOID:
+                type: string
+              eventDate:
+                type: string
+                format: date
+              repeatKey:
+                type: string
+              forms:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - formOID
+                  - fields
+                  properties:
+                    formOID:
+                      type: string
+                    fields:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - fieldOID
+                        - value
+                        properties:
+                          fieldOID:
+                            type: string
+                          value:
+                            type: string
+    CRFField:
+      type: object
+      properties:
+        fieldOID:
+          type: string
+        value:
+          type: string
+        status:
+          type: string
+          enum:
+          - NotStarted
+          - Saved
+          - Incomplete
+          - Complete
+          - Verified
+          - Signed
+          - Frozen
+          - Locked
+        dataEntryDateTime:
+          type: string
+          format: date-time
+        enteredBy:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Medidata Rave username and password
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.medidata.com/connect/token
+          scopes:
+            rave.read: Read access to Rave study data
+            rave.write: Write access to Rave study data
+externalDocs:
+  description: Medidata Developer Documentation
+  url: https://www.medidata.com/

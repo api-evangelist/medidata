@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Medidata Rave EDC REST Audit Studies API
+  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
+  version: 1.0.0
+  contact:
+    name: Medidata Support
+    url: https://www.medidata.com/support
+  license:
+    name: Proprietary
+    url: https://www.medidata.com/terms
+servers:
+- url: https://{tenant}.medidata.com/RaveWebServices/studies
+  variables:
+    tenant:
+      default: medidatatrials
+      description: Your Medidata Rave instance subdomain
+- url: https://developer.medidata.com/api/v2
+  description: Medidata Developer API v2
+security:
+- BasicAuth: []
+- OAuth2: []
+tags:
+- name: Studies
+  description: Clinical study management
+paths:
+  /:
+    get:
+      operationId: listStudies
+      summary: List studies
+      description: Return a list of clinical studies accessible with the provided credentials. Each study entry includes the study name, OID, and environment (Production, UAT, etc.).
+      tags:
+      - Studies
+      parameters:
+      - name: include
+        in: query
+        schema:
+          type: string
+        description: Include additional metadata (e.g., include=subjectCount)
+      responses:
+        '200':
+          description: List of studies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Study:
+      type: object
+      properties:
+        studyOID:
+          type: string
+          description: Study Object Identifier
+        studyName:
+          type: string
+        protocolName:
+          type: string
+        environment:
+          type: string
+          enum:
+          - Production
+          - UAT
+          - Validation
+          - Training
+        status:
+          type: string
+          enum:
+          - Designing
+          - Testing
+          - Active
+          - Locked
+          - Archived
+        createdDate:
+          type: string
+          format: date-time
+        modifiedDate:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+        ErrorDescription:
+          type: string
+    StudyListResponse:
+      type: object
+      properties:
+        studies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Study'
+        totalCount:
+          type: integer
+  responses:
+    Unauthorized:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Medidata Rave username and password
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.medidata.com/connect/token
+          scopes:
+            rave.read: Read access to Rave study data
+            rave.write: Write access to Rave study data
+externalDocs:
+  description: Medidata Developer Documentation
+  url: https://www.medidata.com/

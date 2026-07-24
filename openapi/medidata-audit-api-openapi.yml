@@ -1,0 +1,123 @@
+openapi: 3.1.0
+info:
+  title: Medidata Rave EDC REST Audit API
+  description: Medidata Rave provides electronic data capture (EDC) APIs for clinical trial data collection and management. APIs enable access to study designs, case report forms, patient data, queries, and audit trails for clinical research organizations and pharmaceutical companies.
+  version: 1.0.0
+  contact:
+    name: Medidata Support
+    url: https://www.medidata.com/support
+  license:
+    name: Proprietary
+    url: https://www.medidata.com/terms
+servers:
+- url: https://{tenant}.medidata.com/RaveWebServices/studies
+  variables:
+    tenant:
+      default: medidatatrials
+      description: Your Medidata Rave instance subdomain
+- url: https://developer.medidata.com/api/v2
+  description: Medidata Developer API v2
+security:
+- BasicAuth: []
+- OAuth2: []
+tags:
+- name: Audit
+  description: Audit trail access for 21 CFR Part 11 compliance
+paths:
+  /{studyOID}/AuditRecords:
+    get:
+      operationId: getAuditRecords
+      summary: Get audit trail records
+      description: Retrieve audit trail records for data changes in the study. Provides a 21 CFR Part 11 / GCP-compliant audit history.
+      tags:
+      - Audit
+      parameters:
+      - name: studyOID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: SubjectKey
+        in: query
+        schema:
+          type: string
+      - name: SiteID
+        in: query
+        schema:
+          type: string
+      - name: StartDate
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: EndDate
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: PageSize
+        in: query
+        schema:
+          type: integer
+          default: 100
+          maximum: 1000
+      responses:
+        '200':
+          description: Audit records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditRecordListResponse'
+components:
+  schemas:
+    AuditRecordListResponse:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        totalCount:
+          type: integer
+    AuditRecord:
+      type: object
+      properties:
+        auditID:
+          type: integer
+        subjectKey:
+          type: string
+        siteID:
+          type: string
+        formOID:
+          type: string
+        fieldOID:
+          type: string
+        oldValue:
+          type: string
+        newValue:
+          type: string
+        auditType:
+          type: string
+        userID:
+          type: string
+        auditDateTime:
+          type: string
+          format: date-time
+        reason:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Medidata Rave username and password
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.medidata.com/connect/token
+          scopes:
+            rave.read: Read access to Rave study data
+            rave.write: Write access to Rave study data
+externalDocs:
+  description: Medidata Developer Documentation
+  url: https://www.medidata.com/
